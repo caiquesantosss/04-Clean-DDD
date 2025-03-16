@@ -1,0 +1,10 @@
+import { Question } from '../../enterprise/entities/question'
+import { Slug } from '../../enterprise/entities/values-object/slug'
+
+export interface QuestionRepository {
+  create(question: Question): Promise<void>
+  save(question: Question): Promise<void>
+  delete(question: Question): Promise<void>
+  findBySlug(slug: string): Promise<Question | null>
+  findById(id: string): Promise<Question | null>
+}

@@ -7,23 +7,19 @@ interface FetchRecentQuestionUseCaseRequest {
 }
 
 interface FetchRecentQuestionUseCaseResponse {
-    question: Question[]
+    questions: Question[]
 }
 
 export class FetchRecentQuestionUseCaseUseCase {
   constructor(private questionRepository: QuestionRepository) {}
 
   async execute({
-    slug
+    page
   }: FetchRecentQuestionUseCaseRequest): Promise<FetchRecentQuestionUseCaseResponse> {
-    const question = await this.questionRepository.findBySlug(slug)
-
-    if (!question) {
-        throw new Error('Question not found')
-    }
+    const questions = await this.questionRepository.findManyRecent({ page })
 
     return {
-        question
+        questions, 
     }
   }
 }

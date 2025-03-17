@@ -40,10 +40,7 @@ export class ChooseQuestionBestAnswerUseCase {
     if (AuthorId !== question.AuthorId.toString()) {
       throw new Error('Not allowed')
     }
-
-    console.log('Antes de salvar a questão:', question)
-
-
+    
     question.bestAnswerId = answer.id
 
     await this.questionRepository.save(question)

@@ -1,3 +1,4 @@
+import { PaginationParams } from '@/core/repositories/pagenations-params'
 import { AnswerRepository } from '../../src/domain/forum/application/repositories/answer-repository'
 import { Answer } from '../../src/domain/forum/enterprise/entities/answer'
 
@@ -27,5 +28,13 @@ export class InMemoryAnswerRepository implements AnswerRepository {
       return null
     }
     return answer
+  }
+
+  async findManyQuestionId(questioId: string, params: PaginationParams) {
+    const answers = this.items
+      .filter((item) => item.QuestionId.toString() === questioId)
+      .slice((params.page - 1) * 20, params.page * 20)
+
+    return answers
   }
 }

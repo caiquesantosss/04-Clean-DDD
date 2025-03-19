@@ -1,17 +1,21 @@
-import { UniqueEntityId } from '@/core/entities/unique-entity'
-import { Answer } from '../../enterprise/entities/answer'
 import { AnswerRepository } from '../repositories/answer-repository'
 import { Question } from '../../enterprise/entities/question'
 import { QuestionRepository } from '../repositories/question-repository'
+import { NotAllowedError } from './errors/not-allowed-error'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { Either, left, right } from '@/core/either'
 
 interface ChooseQuestionBestAnswerRequest {
   AnswerId: string
   AuthorId: string
 }
 
-interface ChooseQuestionBestAnswerResponse {
-  question: Question
-}
+type ChooseQuestionBestAnswerResponse = Either<
+  NotAllowedError | ResourceNotFoundError,
+  {
+    question: Question
+  }
+>
 
 export class ChooseQuestionBestAnswerUseCase {
   constructor(
@@ -26,7 +30,7 @@ export class ChooseQuestionBestAnswerUseCase {
     const answer = await this.answerRepository.findById(AnswerId)
 
     if (!answer) {
-      throw new Error('Answer not found')
+      return left(new ResourceNotFoundError)
     }
 
     const question = await this.questionRepository.findById(
@@ -34,19 +38,17 @@ export class ChooseQuestionBestAnswerUseCase {
     )
 
     if (!question) {
-      throw new Error('Question not found')
+      return left(new ResourceNotFoundError)
     }
 
     if (AuthorId !== question.AuthorId.toString()) {
-      throw new Error('Not allowed')
+      return left(new NotAllowedError)
     }
-    
+
     question.bestAnswerId = answer.id
 
     await this.questionRepository.save(question)
 
-    return {
-        question
-    }
+    return right({ question})
   }
 }

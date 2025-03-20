@@ -1,3 +1,4 @@
+import { UniqueEntityId } from '@/core/entities/unique-entity'
 import { AnswerQuestionUseCase } from './answer-question'
 import { InMemoryAnswerRepository } from 'test/repositories/in-memory-answer-repository'
 
@@ -15,9 +16,21 @@ describe('Create an Answer', () => {
       questionId: '1',
       InstructorId: '1',
       content: 'Eu quero fazer uma resposta!',
+      attachmentsIds: ['1', '2'],
     })
 
     expect(result.isRight()).toBe(true)
     expect(inMemoryAnswerRepository.items[0]).toEqual(result.value?.answer)
+    expect(
+      inMemoryAnswerRepository.items[0].attachments.currentItems
+    ).toHaveLength(2)
+    expect(inMemoryAnswerRepository.items[0].attachments.currentItems).toEqual([
+      expect.objectContaining({
+        attachmentId: new UniqueEntityId('1').toString(),
+      }),
+      expect.objectContaining({
+        attachmentId: new UniqueEntityId('2').toString(),
+      }),
+    ])
   })
 })

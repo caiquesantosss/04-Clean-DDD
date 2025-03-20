@@ -4,13 +4,20 @@ import { Slug } from '../../enterprise/entities/values-object/slug'
 import { DeleteQuestionUseCase } from './delete-question-use-case'
 import { UniqueEntityId } from '@/core/entities/unique-entity'
 import { NotAllowedError } from './errors/not-allowed-error'
+import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachments-repository'
+import { MakeQuestionAttachment } from 'test/factories/make-question-attachments'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
+let inMemoryQuestionAttachmentRepository: InMemoryQuestionAttachmentRepository
 let sut: DeleteQuestionUseCase
 
 describe('Delete Question', () => {
   beforeEach(() => {
-    inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
+    inMemoryQuestionAttachmentRepository =
+      new InMemoryQuestionAttachmentRepository()
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentRepository
+    )
     sut = new DeleteQuestionUseCase(inMemoryQuestionsRepository)
   })
 
@@ -23,6 +30,17 @@ describe('Delete Question', () => {
     )
 
     await inMemoryQuestionsRepository.create(newQuestion)
+
+    inMemoryQuestionAttachmentRepository.items.push(
+      MakeQuestionAttachment({
+        questionId: newQuestion.id.toString(),
+        attachmentId: new UniqueEntityId('1').toString(),
+      }),
+      MakeQuestionAttachment({
+        questionId: newQuestion.id.toString(),
+        attachmentId: new UniqueEntityId('2').toString(),
+      })
+    )
 
     await sut.execute({
       questionId: 'question-1',

@@ -14,7 +14,9 @@ describe('Edit Question', () => {
   beforeEach(() => {
     inMemoryQuestionAttachmentRepository =
       new InMemoryQuestionAttachmentRepository()
-    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(inMemoryQuestionAttachmentRepository)
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentRepository
+    )
     sut = new EditQuestionUseCase(
       inMemoryQuestionsRepository,
       inMemoryQuestionAttachmentRepository

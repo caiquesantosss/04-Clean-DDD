@@ -2,13 +2,19 @@ import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questio
 import { GetQuestionBySlugUseCase } from './get-question-by-slug'
 import { MakeQuestion } from 'test/factories/make-question'
 import { Slug } from '../../enterprise/entities/values-object/slug'
+import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachments-repository'
 
+let inMemoryQuestionAttachmentRepository: InMemoryQuestionAttachmentRepository
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let sut: GetQuestionBySlugUseCase
 
 describe('Get Question By Slug', () => {
   beforeEach(() => {
-    inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
+    inMemoryQuestionAttachmentRepository =
+      new InMemoryQuestionAttachmentRepository()
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentRepository
+    )
     sut = new GetQuestionBySlugUseCase(inMemoryQuestionsRepository)
   })
 
@@ -23,11 +29,10 @@ describe('Get Question By Slug', () => {
       slug: 'example-question',
     })
 
-    /* expect(result.value?.question).toEqual(newQuestion)  
-    isso ta funcionando, mas tá dando erro que n encontra a question
-    e sinceramente eu não sei o motivo, ele está igua a todos. Enfim.
-    */
-
-    expect(result.value) //Só para o teste passar.
+    expect(result.value).toMatchObject({
+      question: expect.objectContaining({
+        title: newQuestion.title
+      })
+    })
   })
 })

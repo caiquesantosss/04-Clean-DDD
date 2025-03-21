@@ -1,6 +1,5 @@
 import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository'
 import { MakeQuestion } from 'test/factories/make-question'
-import { Slug } from '../../enterprise/entities/values-object/slug'
 import { DeleteQuestionUseCase } from './delete-question-use-case'
 import { UniqueEntityId } from '@/core/entities/unique-entity'
 import { NotAllowedError } from './errors/not-allowed-error'

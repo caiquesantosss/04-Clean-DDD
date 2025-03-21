@@ -2,13 +2,19 @@ import { InMemoryAnswerRepository } from 'test/repositories/in-memory-answer-rep
 import { FetchQuestionAnswerUseCase } from './fetch-questions-answer-use-case'
 import { MakeAnswer } from 'test/factories/make-answer'
 import { UniqueEntityId } from '@/core/entities/unique-entity'
+import { InMemoryAnswerAttachmentRepository } from 'test/repositories/in-memory-answer-attachment-repository'
 
 let inMemoryAnswerRepository: InMemoryAnswerRepository
+let inMemoryAnswerAttachmentRepository: InMemoryAnswerAttachmentRepository
 let sut: FetchQuestionAnswerUseCase
 
 describe('Fetch Questions Answers', () => {
   beforeEach(() => {
-    inMemoryAnswerRepository = new InMemoryAnswerRepository()
+    inMemoryAnswerAttachmentRepository =
+      new InMemoryAnswerAttachmentRepository()
+    inMemoryAnswerRepository = new InMemoryAnswerRepository(
+      inMemoryAnswerAttachmentRepository
+    )
     sut = new FetchQuestionAnswerUseCase(inMemoryAnswerRepository)
   })
 

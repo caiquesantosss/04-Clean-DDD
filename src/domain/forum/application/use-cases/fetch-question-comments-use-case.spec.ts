@@ -14,17 +14,17 @@ describe('Fetch Questions Comments', () => {
 
   it('should be able to fetch a questions comments', async () => {
     await inMemoryQuestionCommentRepository.create(
-        MakeQuestionComment({
+      MakeQuestionComment({
         questionId: new UniqueEntityId('question-1'),
       })
     )
     await inMemoryQuestionCommentRepository.create(
-        MakeQuestionComment({
+      MakeQuestionComment({
         questionId: new UniqueEntityId('question-1'),
       })
     )
     await inMemoryQuestionCommentRepository.create(
-        MakeQuestionComment({
+      MakeQuestionComment({
         questionId: new UniqueEntityId('question-1'),
       })
     )

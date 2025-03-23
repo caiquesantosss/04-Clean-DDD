@@ -1,8 +1,8 @@
 import { AnswerRepository } from '../repositories/answer-repository'
 import { Question } from '../../enterprise/entities/question'
 import { QuestionRepository } from '../repositories/question-repository'
-import { NotAllowedError } from './errors/not-allowed-error'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { NotAllowedError } from '../../../../core/errors/errors/not-allowed-error'
+import { ResourceNotFoundError } from '../../../../core/errors/errors/resource-not-found-error'
 import { Either, left, right } from '@/core/either'
 
 interface ChooseQuestionBestAnswerRequest {
@@ -30,7 +30,7 @@ export class ChooseQuestionBestAnswerUseCase {
     const answer = await this.answerRepository.findById(AnswerId)
 
     if (!answer) {
-      return left(new ResourceNotFoundError)
+      return left(new ResourceNotFoundError())
     }
 
     const question = await this.questionRepository.findById(
@@ -38,17 +38,17 @@ export class ChooseQuestionBestAnswerUseCase {
     )
 
     if (!question) {
-      return left(new ResourceNotFoundError)
+      return left(new ResourceNotFoundError())
     }
 
     if (AuthorId !== question.AuthorId.toString()) {
-      return left(new NotAllowedError)
+      return left(new NotAllowedError())
     }
 
     question.bestAnswerId = answer.id
 
     await this.questionRepository.save(question)
 
-    return right({ question})
+    return right({ question })
   }
 }

@@ -4,7 +4,7 @@ import { UniqueEntityId } from '@/core/entities/unique-entity'
 import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository'
 import { ChooseQuestionBestAnswerUseCase } from './choose-question-best-answer'
 import { MakeQuestion } from 'test/factories/make-question'
-import { NotAllowedError } from './errors/not-allowed-error'
+import { NotAllowedError } from '../../../../core/errors/errors/not-allowed-error'
 import { InMemoryAnswerAttachmentRepository } from 'test/repositories/in-memory-answer-attachment-repository'
 import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachments-repository'
 
@@ -16,11 +16,17 @@ let sut: ChooseQuestionBestAnswerUseCase
 
 describe('Choose Question Best Answer', () => {
   beforeEach(() => {
-    inMemoryQuestionAttachmentRepository = new InMemoryQuestionAttachmentRepository()
-    inMemoryAnswerAttachmentRepository = new InMemoryAnswerAttachmentRepository()
-    inMemoryAnswersRepository = new InMemoryAnswerRepository(inMemoryAnswerAttachmentRepository)
-    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(inMemoryQuestionAttachmentRepository)
-    
+    inMemoryQuestionAttachmentRepository =
+      new InMemoryQuestionAttachmentRepository()
+    inMemoryAnswerAttachmentRepository =
+      new InMemoryAnswerAttachmentRepository()
+    inMemoryAnswersRepository = new InMemoryAnswerRepository(
+      inMemoryAnswerAttachmentRepository
+    )
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentRepository
+    )
+
     sut = new ChooseQuestionBestAnswerUseCase(
       inMemoryQuestionsRepository,
       inMemoryAnswersRepository
@@ -36,7 +42,7 @@ describe('Choose Question Best Answer', () => {
 
     await sut.execute({
       AnswerId: answer.id.toString(),
-      AuthorId: question.AuthorId.toString()
+      AuthorId: question.AuthorId.toString(),
     })
 
     expect(inMemoryQuestionsRepository.items[0].BestAnswerId).toEqual(answer.id)
@@ -44,7 +50,7 @@ describe('Choose Question Best Answer', () => {
 
   it('should not be able to choose a another user question best answer', async () => {
     const question = MakeQuestion({
-        authorId: new UniqueEntityId('author-1'),
+      authorId: new UniqueEntityId('author-1'),
     })
     const answer = MakeAnswer({ questionId: question.id })
 

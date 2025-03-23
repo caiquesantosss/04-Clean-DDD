@@ -1,8 +1,8 @@
 import { Either, left, right } from '@/core/either'
 import { Question } from '../../enterprise/entities/question'
 import { QuestionRepository } from '../repositories/question-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { NotAllowedError } from './errors/not-allowed-error'
+import { ResourceNotFoundError } from '../../../../core/errors/errors/resource-not-found-error'
+import { NotAllowedError } from '../../../../core/errors/errors/not-allowed-error'
 import { N } from 'vitest/dist/chunks/reporters.66aFHiyX'
 import { QuestionAttachmentRepository } from '../repositories/question-attachments-repository'
 import { QuestionAttachmentList } from '../../enterprise/entities/question-attachment-list'
@@ -54,15 +54,15 @@ export class EditQuestionUseCase {
       currentQuestionAttchmenst
     )
 
-    const questionAttachment = attachmentsIds.map((attachmentId)  => {
+    const questionAttachment = attachmentsIds.map((attachmentId) => {
       return QuestionAttachment.create({
-        attachmentId: new UniqueEntityId(attachmentId).toString(), 
-        questionId: question.id.toString()
+        attachmentId: new UniqueEntityId(attachmentId).toString(),
+        questionId: question.id.toString(),
       })
     })
 
     questionAttachmentList.update(questionAttachment)
-    
+
     question.attachments = questionAttachmentList
     question.title = title
     question.content = content

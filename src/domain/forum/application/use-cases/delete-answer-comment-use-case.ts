@@ -1,14 +1,17 @@
 import { Either, left, right } from '@/core/either'
 import { AnswerCommentRepository } from '../repositories/answer-comment-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found-error'
-import { NotAllowedError } from './errors/not-allowed-error'
+import { ResourceNotFoundError } from '../../../../core/errors/errors/resource-not-found-error'
+import { NotAllowedError } from '../../../../core/errors/errors/not-allowed-error'
 
 interface DeleteAnswerCommentRequest {
   authorId: string
   answerCommentId: string
 }
 
-type DeleteAnswerCommentResponse = Either<ResourceNotFoundError | NotAllowedError, {}>
+type DeleteAnswerCommentResponse = Either<
+  ResourceNotFoundError | NotAllowedError,
+  {}
+>
 
 export class DeleteAnswerCommentUseCase {
   constructor(private answerCommentRepository: AnswerCommentRepository) {}

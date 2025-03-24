@@ -3,6 +3,7 @@ import { QuestionRepository } from '../../src/domain/forum/application/repositor
 import { Question } from '../../src/domain/forum/enterprise/entities/question'
 import { PaginationParams } from '@/core/repositories/pagenations-params'
 import { QuestionAttachmentRepository } from '../../src/domain/forum/application/repositories/question-attachments-repository'
+import { DomainEvents } from '../../src/core/events/domain-events'
 
 export class InMemoryQuestionsRepository implements QuestionRepository {
   public items: Question[] = []
@@ -13,6 +14,8 @@ export class InMemoryQuestionsRepository implements QuestionRepository {
 
   async create(question: Question) {
     this.items.push(question)
+
+    DomainEvents.dispatchEventsForAggregate(question.id)
   }
 
   async findBySlug(slug: string) {
@@ -37,6 +40,8 @@ export class InMemoryQuestionsRepository implements QuestionRepository {
     const itemIndex = this.items.findIndex((item) => item.id === question.id)
 
     this.items[itemIndex] = question
+
+    DomainEvents.dispatchEventsForAggregate(question.id)
   }
 
   async delete(question: Question) {

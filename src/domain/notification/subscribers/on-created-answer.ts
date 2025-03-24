@@ -2,7 +2,7 @@ import { DomainEvents } from '@/core/events/domain-events'
 import { EventHandler } from '@/core/events/event-handler'
 import { AnswerCreatedEvent } from '@/domain/forum/application/event/answer-created-event'
 import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository'
-import { SendNotificationUseCase } from '../use-cases/send-notification-use-case'
+import { SendNotificationUseCase } from '../application/use-cases/send-notification-use-case'
 
 export class OnCreatedAnswer implements EventHandler {
   constructor(

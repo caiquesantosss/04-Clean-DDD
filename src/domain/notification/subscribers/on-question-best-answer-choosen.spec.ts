@@ -9,7 +9,7 @@ import {
   SendNotificationUseCase,
   SendNotificationUseCaseRequest,
   SendNotificationUseCaseRespose,
-} from '../use-cases/send-notification-use-case'
+} from '../application/use-cases/send-notification-use-case'
 import { MockInstance, vi } from 'vitest'
 import { MakeQuestion } from 'test/factories/make-question'
 
@@ -26,7 +26,7 @@ let sendNotificationExecuteSpy: MockInstance<
   ) => Promise<SendNotificationUseCaseRespose>
 >
 
-describe('On Created Answer', () => {
+describe('On Question Best Answer Chosen', () => {
   beforeEach(() => {
     inMemoryQuestionAttachmentsRepository =
       new InMemoryQuestionAttachmentRepository()
@@ -48,12 +48,16 @@ describe('On Created Answer', () => {
     new OnCreatedAnswer(inMemoryQuestionRepository, sendNotificationUseCase)
   })
 
-  it('should send a notification when an answer is created', async () => {
-    const quesiton = MakeQuestion()
-    const answer = MakeAnswer({ questionId: quesiton.id })
+  it('should send a notification when question has new best answer chosen', async () => {
+    const question = MakeQuestion()
+    const answer = MakeAnswer({ questionId: question.id })
 
-    inMemoryQuestionRepository.create(quesiton)
+    inMemoryQuestionRepository.create(question)
     inMemoryAnswerRepository.create(answer)
+
+    question.bestAnswerId = answer.id
+
+    inMemoryQuestionRepository.save(question)
 
     await vi.waitFor(
       async () => {

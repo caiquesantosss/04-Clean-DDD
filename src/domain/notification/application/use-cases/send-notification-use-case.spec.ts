@@ -1,15 +1,15 @@
 import { UniqueEntityId } from '@/core/entities/unique-entity'
 import { InMemoryNotificationRepository } from 'test/repositories/in-memory-notification-repository'
-import { NotificationUseCase } from './send-notification-use-case'
+import { SendNotificationUseCase } from './send-notification-use-case'
 
 let inMemoryNotificaitonRepository: InMemoryNotificationRepository
-let sut: NotificationUseCase
+let sut: SendNotificationUseCase
 
 describe('Create a Notification', () => {
   beforeEach(() => {
     inMemoryNotificaitonRepository = new InMemoryNotificationRepository()
 
-    sut = new NotificationUseCase(inMemoryNotificaitonRepository)
+    sut = new SendNotificationUseCase(inMemoryNotificaitonRepository)
   })
 
   it('should be able to create a notification', async () => {
